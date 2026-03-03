@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>💖 Playful Surprise 💖</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Background GIF */
+body {
+    background: url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHNuaW00N25qM2FkMm5pdWd3OWNzdmVxaTAxYjE2ZGswem42ZnV3ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/a692I53FP9XtvM4YCc/giphy.gif') 
+                center center / cover no-repeat fixed;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+/* Question styling */
+h1 {
+    margin-top: 50px;
+    font-family: 'Pacifico', cursive;
+    font-size: 36px;
+    text-shadow: 2px 2px 10px #ff4d6d;
+    position: relative;
+    z-index: 20;
+}
+
+/* Romantic paragraph styling */
+#extraText {
+    display: block;
+    max-width: 950px;
+    margin: 25px auto;
+    padding: 25px 35px;
+    line-height: 1.8;
+    font-size: 26px;
+    font-family: 'Dancing Script', cursive;
+    color: black;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1.5s ease, transform 1.5s ease;
+}
+
+/* Buttons */
+button {
+    padding: 25px 40px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    transition: all 0.3s;
+    position: absolute;
+    z-index: 20;
+}
+
+.yesBtn {
+    background-color: #ff4d6d;
+    color: white;
+}
+
+.noBtn {
+    background-color: white;
+    color: #ff4d6d;
+}
+
+/* Sad GIFs scattered */
+.sadGif {
+    position: absolute;
+    width: 150px;
+    z-index: 10;
+    pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="question">
+💘 Do you want to spend special time with me? 💘
+<span id="extraText"></span>
+</h1>
+
+<button class="yesBtn" id="yesBtn" style="top:60%; left:45%; width:200px; height:60px;">YES 💖</button>
+
+<button class="noBtn" style="top:60%; left:20%;">No 😅</button>
+<button class="noBtn" style="top:65%; left:50%;">Maybe No 🙈</button>
+<button class="noBtn" style="top:55%; left:75%;">Not Sure 😜</button>
+
+<div id="sadGifsContainer"></div>
+
+<script>
+const sadGifsLinks = [
+  "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbjVqb2w4enNqdmMweWh6Z2x4bmc1bWJ4d3VkZXJqY3B0MGllYzAyZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5M7WUL95CE8LvBIj5o/giphy.gif",
+  "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnBkYWNyZHhiOXhwYngwdXRmOGExcGU5Mmh3dTJvdmtuanAzNXU3dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IFEyABqHRyg3CEMAlY/giphy.gif",
+  "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExOW85bHBkdmN3bzRvcXAwMXpuMGNpMHc4bWxmZjJiYzBianppdzRlNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9S32TZsgxKekmn9qUI/giphy.gif",
+  "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGY1YjR4NGoyZDl6ZnM4NmJvOGoyNmlsZzV0MXg2bWZvdmNzaXpzNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/RjMjK5rREKrArLYqWc/giphy.gif"
+];
+
+let yesWidth = 200;
+let yesHeight = 60;
+
+const yesBtn = document.getElementById("yesBtn");
+const sadContainer = document.getElementById("sadGifsContainer");
+
+const noButtons = document.querySelectorAll(".noBtn");
+let hoverCounts = {};
+
+noButtons.forEach(btn => {
+    hoverCounts[btn.innerText] = Math.floor(Math.random() * 2) + 2;
+
+    btn.addEventListener("mouseenter", () => {
+        if(hoverCounts[btn.innerText] > 0){
+            const newLeft = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const newTop = Math.random() * (window.innerHeight - btn.offsetHeight);
+            btn.style.left = `${newLeft}px`;
+            btn.style.top = `${newTop}px`;
+            hoverCounts[btn.innerText]--;
+        }
+    });
+
+    btn.addEventListener("click", () => {
+        if(hoverCounts[btn.innerText] > 0) return;
+
+        yesWidth *= 2;
+        yesHeight *= 2;
+        yesWidth = Math.min(yesWidth, window.innerWidth);
+        yesHeight = Math.min(yesHeight, window.innerHeight);
+
+        yesBtn.style.width = yesWidth + "px";
+        yesBtn.style.height = yesHeight + "px";
+        yesBtn.style.fontSize = (24*(yesWidth/200)) + "px";
+        yesBtn.style.left = `calc(50% - ${yesWidth/2}px)`;
+        yesBtn.style.top = `calc(50% - ${yesHeight/2}px)`;
+
+        btn.style.display = "none";
+    });
+});
+
+let questionIndex = 0;
+
+const questions = [
+    "💘 Do you want to spend special time with me? 💘",
+    "📸 Will you send me one cute photo of you? 🥺💖",
+    "📞 And… will you video call me later? 🥰"
+];
+
+const paragraphText = `
+I have been feeling that this distance has quietly created something between us — something unspoken, yet present. I say this without pressure, only honesty. For me, it is difficult; I am not accustomed to loving from afar. Still, I remain. I am here.
+<br><br>
+I do not know what the future holds, and I will not pretend to. But I know that I am cherishing the present — and I am grateful for your presence in it.
+<br><br>
+I want you to know that with me, you always have a space to speak — about everything or about nothing at all. Even the thoughts that seem too small or too heavy to place elsewhere can rest here. I will not judge you. I trust you with my vulnerabilities, and that trust is sincere.
+<br><br>
+I know you are independent and capable of handling your world on your own. I am not here to question that strength. I am only here to remind you that even strength deserves rest — a steady shoulder, a hand that does not withdraw, and eyes that see your beauty, especially when you struggle to see it yourself.
+`;
+
+yesBtn.addEventListener("click", ()=> {
+    questionIndex++;
+    if(questionIndex >= questions.length){
+        document.body.innerHTML = `<h1 style="margin-top:200px;">🎉 YESSS BACHHUUUU!!! 🎉<br><br>You just made me the happiest person 💖<br><br>I can't wait 🥰</h1>`;
+        return;
+    }
+
+    document.getElementById("question").childNodes[0].nodeValue = questions[questionIndex];
+
+    const extra = document.getElementById("extraText");
+    extra.style.opacity = 0;
+    extra.style.transform = "translateY(20px)";
+    extra.innerHTML = paragraphText;
+
+    setTimeout(() => {
+        extra.style.opacity = 1;
+        extra.style.transform = "translateY(0)";
+    }, 100);
+
+    sadContainer.innerHTML = "";
+
+    yesWidth = 200;
+    yesHeight = 60;
+    yesBtn.style.width = yesWidth + "px";
+    yesBtn.style.height = yesHeight + "px";
+    yesBtn.style.fontSize = "24px";
+
+    noButtons.forEach((btn, i) => {
+        btn.style.display = "block";
+        btn.style.left = i===0 ? "20%" : i===1 ? "50%" : "75%";
+        btn.style.top = i===0 ? "60%" : i===1 ? "65%" : "55%";
+        hoverCounts[btn.innerText] = Math.floor(Math.random() * 2) + 2;
+    });
+});
+</script>
+
+</body>
+</html>
